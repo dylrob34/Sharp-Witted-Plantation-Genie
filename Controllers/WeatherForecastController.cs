@@ -26,6 +26,8 @@ namespace PlantationGenie.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            Models.UserContext user = HttpContext.RequestServices.GetService(typeof(Models.UserContext)) as Models.UserContext;
+            Console.WriteLine(user.GetUser());
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
