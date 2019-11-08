@@ -20,7 +20,7 @@ export class Counter extends Component {
       <div>
         <h1>Counter</h1>
 
-        <p>This is a react component example</p>
+        <p>Random changes...</p>
 
         <p aria-live="polite">Current count: <strong>{this.state.currentCount}</strong></p>
 
