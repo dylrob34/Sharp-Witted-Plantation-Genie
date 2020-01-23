@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlantationGenie.Models;
 
 namespace PlantationGenie
 {
@@ -22,7 +21,6 @@ namespace PlantationGenie
         {
 
             services.AddControllersWithViews();
-            services.Add(new ServiceDescriptor(typeof(UserContext), new UserContext(Configuration.GetConnectionString("DefaultConnection"))));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
