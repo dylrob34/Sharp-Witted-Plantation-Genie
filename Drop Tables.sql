@@ -1,0 +1,1 @@
+drop tables user, device, devicetype, plant;

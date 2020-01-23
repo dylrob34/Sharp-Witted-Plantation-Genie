@@ -26,7 +26,7 @@ namespace PlantationGenie.Models
             string response = "error";
             using (MySqlConnection conn = GetConnection())
             {
-                conn.Open();
+                //conn.Open();
                 MySqlCommand cmd = new MySqlCommand("select * from employee where employee_id=1234", conn);
 
                 using (var reader = cmd.ExecuteReader())
