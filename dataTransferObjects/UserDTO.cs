@@ -9,6 +9,6 @@ namespace Sharp_Witted_Plantation_Genie.dataTransferObjects
         public string LastName { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public List<Device> Devices { get; set; }
+        public List<DeviceDTO> Devices { get; set; }
     }
 }

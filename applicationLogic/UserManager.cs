@@ -14,18 +14,28 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
             _sendesContext = sendesContext;
         }
 
-        
-        public UserDTO GetUser(string username){
+
+        public UserDTO GetUser(string username)
+        {
             User user = _sendesContext.User.Find(username);
-            List<Device> userDevices = (from device in _sendesContext.Device
-                                    where device.RegisteredUser == username
-                                    select device).ToList();
-            return new UserDTO{
+            // map only the device properties we want to return in the response
+            List<DeviceDTO> userDevices = user.Device.Select(device =>
+                new DeviceDTO
+                {
+                    Id = device.Id,
+                    DeviceType = device.DeviceType,
+                    RegisteredUser = device.RegisteredUser,
+                    PlantMonitering = device.PlantMonitering,
+                    WaterLevel = device.WaterLevel
+                }).ToList();
+                
+            return new UserDTO
+            {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
                 Email = user.Email,
-                Devices = user.Device.ToList()
+                Devices = userDevices
             };
         }
     }
