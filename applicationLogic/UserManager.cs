@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace Sharp_Witted_Plantation_Genie.applicationLogic
 {
-    public class UserRetriever
+    public class UserManager
     {
         private readonly sendesContext _sendesContext;
 
-        public UserRetriever(sendesContext sendesContext)
+        public UserManager(sendesContext sendesContext)
         {
             _sendesContext = sendesContext;
         }

@@ -35,7 +35,7 @@ namespace PlantationGenie
                 options.UseMySql(Configuration.GetConnectionString("sendesContext"));
             });
 
-            services.AddScoped<UserRetriever>();
+            services.AddScoped<UserManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

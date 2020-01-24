@@ -16,9 +16,9 @@ namespace PlantationGenie.Controllers
     {
 
         private readonly sendesContext _sendesContext;
-        private readonly UserRetriever _userRetriever;
+        private readonly UserManager _userRetriever;
 
-        public UserController(UserRetriever userRetriever, sendesContext sendesContext)
+        public UserController(UserManager userRetriever, sendesContext sendesContext)
         {
             _userRetriever = userRetriever;
             _sendesContext = sendesContext;
