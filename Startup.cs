@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlantationGenie.sendes;
+using Sharp_Witted_Plantation_Genie.applicationLogic;
 
 namespace PlantationGenie
 {
@@ -33,6 +34,8 @@ namespace PlantationGenie
             services.AddDbContext<sendesContext>(options => {
                 options.UseMySql(Configuration.GetConnectionString("sendesContext"));
             });
+
+            services.AddScoped<UserRetriever>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
