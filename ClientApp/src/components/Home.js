@@ -7,7 +7,7 @@ export class Home extends Component {
     user: { }
   }
   async componentDidMount(){
-    const response = await fetch('weatherforecast/user');
+    const response = await fetch('api/user/dylana1998');
     const user = await response.json();
     this.setState({ user: user, isLoading: false })
   }
