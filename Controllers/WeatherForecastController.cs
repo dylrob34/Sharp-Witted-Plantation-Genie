@@ -38,12 +38,5 @@ namespace PlantationGenie.Controllers
             })
             .ToArray();
         }
-
-        [HttpGet("user")]
-        public User GetUser()
-        {
-            User user = _sendesContext.User.Find("dylana1998");
-            return user;
-        }
     }
 }

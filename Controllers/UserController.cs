@@ -1,27 +1,30 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PlantationGenie.sendes;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PlantationGenie.Controllers
 {
-    public class HomeController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class UserController : ControllerBase
     {
+
         private readonly sendesContext _sendesContext;
 
-        public HomeController(sendesContext sendesContext)
+        public UserController(sendesContext sendesContext)
         {
             _sendesContext = sendesContext;
         }
-        // GET: /<controller>/
-        public ActionResult Index()
+
+        [HttpGet("{username}")]
+        public User GetUser(string username)
         {
-            User user = _sendesContext.User.Find("dylana1998");
-            return Ok("the name");
+            User user = _sendesContext.User.Find(username);
+            return user;
         }
     }
 }
