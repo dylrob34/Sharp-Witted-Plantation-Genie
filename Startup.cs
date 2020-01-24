@@ -32,6 +32,7 @@ namespace PlantationGenie
             });
             
             services.AddDbContext<sendesContext>(options => {
+                options.UseLazyLoadingProxies();
                 options.UseMySql(Configuration.GetConnectionString("sendesContext"));
             });
 

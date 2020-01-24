@@ -25,7 +25,7 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
                 LastName = user.LastName,
                 UserName = user.UserName,
                 Email = user.Email,
-                Devices = userDevices
+                Devices = user.Device.ToList()
             };
         }
     }
