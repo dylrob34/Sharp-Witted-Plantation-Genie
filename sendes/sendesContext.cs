@@ -35,6 +35,15 @@ namespace PlantationGenie.sendes
             {
                 entity.ToTable("device");
 
+                entity.HasIndex(e => e.DeviceType)
+                    .HasName("deviceType");
+
+                entity.HasIndex(e => e.PlantMonitering)
+                    .HasName("plantMonitering");
+
+                entity.HasIndex(e => e.RegisteredUser)
+                    .HasName("registeredUser");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .HasColumnType("int(11)");
@@ -63,6 +72,24 @@ namespace PlantationGenie.sendes
                 entity.Property(e => e.WaterLevel)
                     .HasColumnName("waterLevel")
                     .HasColumnType("decimal(4,1)");
+
+                entity.HasOne(d => d.DeviceTypeNavigation)
+                    .WithMany(p => p.Device)
+                    .HasForeignKey(d => d.DeviceType)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("device_ibfk_3");
+
+                entity.HasOne(d => d.PlantMoniteringNavigation)
+                    .WithMany(p => p.Device)
+                    .HasForeignKey(d => d.PlantMonitering)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("device_ibfk_2");
+
+                entity.HasOne(d => d.RegisteredUserNavigation)
+                    .WithMany(p => p.Device)
+                    .HasForeignKey(d => d.RegisteredUser)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("device_ibfk_1");
             });
 
             modelBuilder.Entity<Devicetype>(entity =>
@@ -137,6 +164,12 @@ namespace PlantationGenie.sendes
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
+                    .HasColumnType("varchar(100)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.Salt)
+                    .HasColumnName("salt")
                     .HasColumnType("varchar(100)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
