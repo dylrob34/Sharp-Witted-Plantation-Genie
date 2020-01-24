@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PlantationGenie.sendes;
 
 namespace PlantationGenie.Controllers
 {
@@ -17,10 +18,12 @@ namespace PlantationGenie.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly sendesContext _sendesContext;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, sendesContext sendesContext)
         {
             _logger = logger;
+            _sendesContext = sendesContext;
         }
 
         [HttpGet]
@@ -34,6 +37,13 @@ namespace PlantationGenie.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("user")]
+        public User GetUser()
+        {
+            User user = _sendesContext.User.Find("dylana1998");
+            return user;
         }
     }
 }
