@@ -14,8 +14,8 @@ namespace PlantationGenie
     {
         public static void Main(string[] args)
         {
-            // CreateWebHostBuilder(args).Build().Run();
-            use this to allow command line parameters in the config
+            CreateWebHostBuilder(args).Build().Run();
+            /*use this to allow command line parameters in the config
             var configuration = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .Build();
@@ -35,7 +35,7 @@ namespace PlantationGenie
                 .UseConfiguration(configuration)
                 .Build();
 
-            host.Run();
+            host.Run();*/
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
