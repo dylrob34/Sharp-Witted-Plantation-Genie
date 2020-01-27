@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -5,8 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using PlantationGenie.sendes;
 using Sharp_Witted_Plantation_Genie.applicationLogic;
+using System.Text;
 
 namespace PlantationGenie
 {
@@ -30,7 +33,11 @@ namespace PlantationGenie
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            
+
+            services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
+            var token = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
+            var secret = Encoding.ASCII.GetBytes(token.Secret);
+
             services.AddDbContext<sendesContext>(options => {
                 options.UseLazyLoadingProxies();
                 options.UseMySql(Configuration.GetConnectionString("sendesContext"));
