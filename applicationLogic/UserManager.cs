@@ -1,4 +1,5 @@
 using PlantationGenie.sendes;
+using Sharp_Witted_Plantation_Genie.applicationLogic.password;
 using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,23 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
                 Email = user.Email,
                 Devices = userDevices
             };
+        }
+
+        public ValidationResult CreateUser(CreateUserDTO createUserDTO){
+            if (_sendesContext.User.Find(createUserDTO.UserName) != null){
+                return new ValidationResult { Succeeded = false, ErrorMessage = "That username is already taken" };
+            }
+            PasswordResult passwordResult = PasswordHasher.HashPassword(createUserDTO.Password);
+            User user = new User{
+                UserName = createUserDTO.UserName,
+                FirstName = createUserDTO.FirstName,
+                LastName = createUserDTO.LastName,
+                Password = passwordResult.HashedPassword,
+                Salt = passwordResult.SaltedText
+            };
+            _sendesContext.User.Add(user);
+            _sendesContext.SaveChanges();
+            return new ValidationResult { Succeeded = true };
         }
     }
 }

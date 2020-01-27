@@ -16,19 +16,26 @@ namespace PlantationGenie.Controllers
     {
 
         private readonly sendesContext _sendesContext;
-        private readonly UserManager _userRetriever;
+        private readonly UserManager _userManager;
 
         public UserController(UserManager userRetriever, sendesContext sendesContext)
         {
-            _userRetriever = userRetriever;
+            _userManager = userRetriever;
             _sendesContext = sendesContext;
         }
 
         [HttpGet("{username}")]
         public UserDTO GetUser(string username)
         {
-            UserDTO user = _userRetriever.GetUser(username);
+            UserDTO user = _userManager.GetUser(username);
             return user;
+        }
+
+        // TODO: Add validation so user can't have a blank username, must have an email, etc..
+        [HttpPost("")]
+        public ValidationResult CreateUser(CreateUserDTO createUserDTO){
+            ValidationResult result = _userManager.CreateUser(createUserDTO);
+            return result;
         }
     }
 }
