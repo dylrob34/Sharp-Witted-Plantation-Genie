@@ -11,28 +11,12 @@ import { SignUp } from './components/SignUp';
 import './custom.css'
 
 export default class App extends Component {
-  static displayName = App.name;
-  state = {
-    isAuthenticated: false
-  }
+    static displayName = App.name;
 
   render () {
-    const authenticatedRoutes = (
-      <Fragment>
-        <Route path ='/my-profile' />
-        <Route path='/sign-out' />
-      </Fragment>
-    )
-    const unauthenticatedRoutes = (
-      <Fragment>
-        <Route path='/login' component={Login} />
-        <Route path='/sign-up' component={SignUp} />
-      </Fragment>
-    )
     return (
       <Layout>
         <Route exact path='/' component={Home} />
-        {this.state.isAuthenticated ? authenticatedRoutes : unauthenticatedRoutes}
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/buy' component={Buy} />
