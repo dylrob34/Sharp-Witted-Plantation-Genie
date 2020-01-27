@@ -11,27 +11,27 @@ using PlantationGenie.sendes;
 namespace PlantationGenie.Controllers
 {
     [ApiController]
-    [Route("auth/[controller]")]
     public class AuthController : Controller
     {
-        private readonly DbContext _context;
-        public AuthController(DbContext context)
+        private readonly sendesContext _context;
+        public AuthController(sendesContext context)
         {
             _context = context;
         }
 
+        [Route("auth/login")]
         [HttpPost]
-        public async Task<IActionResult> PostLogin([FromBody] AuthObject values)
+        public async Task<JsonResult> PostLogin([FromBody] AuthObject values)
         {
             var user = await _context.FindAsync<User>(values.username);
             if (user != null)
             {
                 if (user.Password == values.password)
                 {
-                    return Ok("true");
+                    return Json("true");
                 }
             }
-            return Ok("false");
+            return Json("false");
         }
     }
 
