@@ -3,6 +3,7 @@
 var emitter = new EventEmitter();
 
 var loginState = false;
+var token = "";
 
 export function getLoginState() {
     return loginState;
@@ -17,4 +18,12 @@ export function unsubscribe(callback) {
 export function updateLoginState(state) {
     loginState = state;
     emitter.emit('login');
+}
+
+export function updateToken(t) {
+    token = t;
+}
+
+export function getToken() {
+    return token;
 }

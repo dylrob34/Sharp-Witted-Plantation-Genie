@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { updateLoginState } from '../GlobalStates';
+import { updateLoginState, updateToken } from '../GlobalStates';
 
 export class Login extends React.Component {
     constructor(props) {
@@ -43,6 +43,8 @@ export class Login extends React.Component {
                     updateLoginState(response.login)
                 }*/
                 console.log("response is: " + resjson.token);
+                updateLoginState(true);
+                updateToken(resjson.token);
             });
     }
 

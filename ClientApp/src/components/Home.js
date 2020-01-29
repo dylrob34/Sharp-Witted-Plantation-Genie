@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { getToken } from "../GlobalStates";
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -13,10 +14,16 @@ export class Home extends Component {
         }
     }
 
-  async componentDidMount(){
-    const response = await fetch('api/user/dylana1998');
+    async componentDidMount() {
+        const token = "Bearer " + getToken();
+      const response = await fetch('api/user/dylana1998',
+          {
+              headers: {
+                  Authorization: token,
+              }
+          });
     if (!response.ok){
-      this.setState({ isAuthenticated: false });
+      this.setState({ isLoading: false });
       return;
     }
     const user = await response.json();
