@@ -54,9 +54,11 @@ namespace PlantationGenie
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidIssuer = appSettings.Issuer,
+                    ValidAudience = appSettings.Audience
                 };
             });
 

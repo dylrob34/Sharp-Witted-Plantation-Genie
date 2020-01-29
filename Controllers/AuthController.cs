@@ -14,7 +14,11 @@ using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 namespace PlantationGenie.Controllers
 {
     [ApiController]
+<<<<<<< HEAD
     [Produces("application/json")]
+=======
+    [Route("[controller]")]
+>>>>>>> develop
     public class AuthController : Controller
     {
         private readonly sendesContext _context;
@@ -26,14 +30,20 @@ namespace PlantationGenie.Controllers
             _authenticator = authenticator;
         }
 
-        [Route("auth/login")]
-        [HttpPost]
-        public JsonResult PostLogin([FromBody] AuthObject values)
+        // auth/login
+        [HttpPost("login")]
+        public ResponseObject PostLogin(AuthObject values)
         {
-            Console.WriteLine("username: " + values.username + " password: " + values.password);
-            //UserDTO user = _authenticator.Authenticate(values.username, values.password);
-            var response = new ResponseObject("false", "nothing yet");
-            return Json(response);
+            string token = _authenticator.Authenticate(values.username, values.password);
+
+            if (string.IsNullOrEmpty(token)){
+                return new ResponseObject{
+                    Failed = true,
+                    Token = ""
+                };
+            }
+
+            return new ResponseObject { Failed = false, Token = token}
         }
     }
 
@@ -45,13 +55,7 @@ namespace PlantationGenie.Controllers
 
     public class ResponseObject
     {
-        public string failed { get; set; }
-        public string token { get; set; }
-
-        public ResponseObject(string f, string t)
-        {
-            failed = f;
-            token = t;
-        }
+        public bool Failed { get; set; }
+        public string Token { get; set; }
     }
 }
