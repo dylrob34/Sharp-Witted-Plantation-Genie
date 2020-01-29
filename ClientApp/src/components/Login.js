@@ -25,22 +25,39 @@ export class Login extends React.Component {
     }
 
     submit(e) {
-        e.preventDefault();
-
+        fetch('auth/login',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'username': this.state.username,
+                    'password': this.state.password
+                })
+            })
+            .then((response) => response.json())
+            .then((resjson) => {
+               /* if (!response.failed) {
+                    updateLoginState(response.login)
+                }*/
+                console.log("response is: " + resjson.token);
+            });
     }
 
     render() {
         return (
             <div>
             <h1>Login</h1>
-            <form onSubmit={this.submit}>
+            <form>
                 <label>username:
                 <input type="text" value={this.state.username} onChange={this.onUsername} />
                 </label>
                 <label>password:
                 <input type="password" value={this.state.password} onChange={this.onPassword} />
                 </label>
-                <input type="submit" value="submit" />
+                    <input type="button" value="submit" onClick={this.submit}/>
                 </form>
             </div>
         );

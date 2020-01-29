@@ -7,6 +7,7 @@ import { Counter } from './components/Counter';
 import { Buy } from './components/Buy';
 import { Login } from './components/Login';
 import { SignUp } from './components/SignUp';
+import Dashboard from './components/Dashboard';
 
 import './custom.css'
 
@@ -21,7 +22,8 @@ export default class App extends Component {
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/buy' component={Buy} />
         <Route path='/login' component={Login} />
-        <Route path='/sign-up' component={SignUp} />
+            <Route path='/sign-up' component={SignUp} />
+            <Route path='/dashboard' component={Dashboard} />
       </Layout>
     );
   }

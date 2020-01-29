@@ -85,6 +85,7 @@ namespace PlantationGenie
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
