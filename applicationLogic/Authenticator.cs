@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PlantationGenie.sendes;
+using Sharp_Witted_Plantation_Genie.applicationLogic.password;
 using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 using Sharp_Witted_Plantation_Genie.helpers;
 using System;
@@ -22,12 +23,21 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
             _sendesContext = sendesContext;
             _appSettings = appSettings.Value;
         }
-        public UserDTO Authenticate(string username, string password)
-        {
-            User user = _sendesContext.User.SingleOrDefault(x => x.UserName == username && x.Password == password);
 
-            if (user == null)
-                return null;
+        /// <param name="username">the username to authenticate</param>
+        /// <param name="password">the password corresponding to the username</param>
+        /// <returns>an empty string if the user is not found, or if the given password does not match
+        /// the user's password. If ther user is found, and the given password is a match, then the token for
+        /// that user will be returned.</returns>
+        public string Authenticate(string username, string password)
+        {
+            User user = _sendesContext.User.Find(username);
+            if (user == null) return "";
+
+            // uncomment this after. Let's just make sure we can generate JWT tokens first.
+
+            // bool passwordIsCorrect = PasswordHasher.VerifyPassword(password, user.Salt, user.Password);
+            // if (!passwordIsCorrect) return "";
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -36,22 +46,16 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.UserName.ToString())
+                    new Claim(ClaimTypes.Name, user.UserName)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Issuer = _appSettings.Issuer,
+                Audience = _appSettings.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(_appSettings.AccessExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return new UserDTO{
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                UserName = user.UserName,
-                Email = user.Email,
-                Token = tokenHandler.WriteToken(token)
-                // get users devices....
-            };
+            return tokenHandler.WriteToken(token);
         }
     }
 }

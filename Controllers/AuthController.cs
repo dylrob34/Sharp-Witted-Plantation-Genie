@@ -14,6 +14,7 @@ using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 namespace PlantationGenie.Controllers
 {
     [ApiController]
+    [Route("[controller]")]
     public class AuthController : Controller
     {
         private readonly sendesContext _context;
@@ -25,12 +26,12 @@ namespace PlantationGenie.Controllers
             _authenticator = authenticator;
         }
 
-        [Route("auth/login")]
-        [HttpPost]
-        public UserDTO PostLogin([FromBody] AuthObject values)
+        // auth/login
+        [HttpPost("login")]
+        public string PostLogin(AuthObject values)
         {
-            UserDTO user = _authenticator.Authenticate(values.username, values.password);
-            return user;
+            string token = _authenticator.Authenticate(values.username, values.password);
+            return token; // this will be an empty string if the user is not authenticated
         }
     }
 
