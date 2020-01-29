@@ -49,6 +49,7 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
                 UserName = createUserDTO.UserName,
                 FirstName = createUserDTO.FirstName,
                 LastName = createUserDTO.LastName,
+                Email = createUserDTO.Email,
                 Password = passwordResult.HashedPassword,
                 Salt = passwordResult.SaltedText
             };

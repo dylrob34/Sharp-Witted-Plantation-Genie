@@ -29,18 +29,15 @@ namespace PlantationGenie.Controllers
 
         // auth/login
         [HttpPost("login")]
-        public ResponseObject PostLogin(AuthObject values)
+        public TokenResponseObject PostLogin(AuthObject values)
         {
             string token = _authenticator.Authenticate(values.username, values.password);
 
             if (string.IsNullOrEmpty(token)){
-                return new ResponseObject{
-                    Failed = true,
-                    Token = ""
-                };
+                return new TokenResponseObject{ Failed = true, Token = "" };
             }
 
-            return new ResponseObject { Failed = false, Token = token };
+            return new TokenResponseObject { Failed = false, Token = token};
         }
     }
 
@@ -50,7 +47,7 @@ namespace PlantationGenie.Controllers
         public string password { get; set; }
     }
 
-    public class ResponseObject
+    public class TokenResponseObject
     {
         public bool Failed { get; set; }
         public string Token { get; set; }

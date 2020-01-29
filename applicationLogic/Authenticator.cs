@@ -34,10 +34,8 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
             User user = _sendesContext.User.Find(username);
             if (user == null) return "";
 
-            // uncomment this after. Let's just make sure we can generate JWT tokens first.
-
-            // bool passwordIsCorrect = PasswordHasher.VerifyPassword(password, user.Salt, user.Password);
-            // if (!passwordIsCorrect) return "";
+            bool passwordIsCorrect = PasswordHasher.VerifyPassword(password, user.Salt, user.Password);
+            if (!passwordIsCorrect) return "";
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
