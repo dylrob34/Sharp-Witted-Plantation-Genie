@@ -14,11 +14,8 @@ using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 namespace PlantationGenie.Controllers
 {
     [ApiController]
-<<<<<<< HEAD
     [Produces("application/json")]
-=======
     [Route("[controller]")]
->>>>>>> develop
     public class AuthController : Controller
     {
         private readonly sendesContext _context;
@@ -43,7 +40,7 @@ namespace PlantationGenie.Controllers
                 };
             }
 
-            return new ResponseObject { Failed = false, Token = token}
+            return new ResponseObject { Failed = false, Token = token };
         }
     }
 
