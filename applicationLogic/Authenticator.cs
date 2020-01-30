@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PlantationGenie;
 using PlantationGenie.sendes;
 using Sharp_Witted_Plantation_Genie.applicationLogic.password;
-using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 using Sharp_Witted_Plantation_Genie.helpers;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
         /// <returns>an empty string if the user is not found, or if the given password does not match
         /// the user's password. If ther user is found, and the given password is a match, then the token for
         /// that user will be returned.</returns>
-        public string Authenticate(string username, string password)
+        public string Login(string username, string password)
         {
             User user = _sendesContext.User.Find(username);
             if (user == null) return "";

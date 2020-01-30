@@ -62,12 +62,12 @@ namespace PlantationGenie
                 };
             });
 
-            services.AddDbContext<sendesContext>(options => {
+            services.AddDbContext<sendesContext>(options =>
+            {
                 options.UseLazyLoadingProxies();
                 options.UseMySql(Configuration.GetConnectionString("sendesContext"));
             });
 
-            services.AddScoped<UserManager>();
             services.AddScoped<Authenticator>();
         }
 

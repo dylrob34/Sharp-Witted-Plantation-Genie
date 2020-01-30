@@ -26,8 +26,16 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ClientApp\src\NewFolder1\**" />
+    <Compile Remove="ClientApp\src\NewFolder2\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\NewFolder1\**" />
+    <Content Remove="ClientApp\src\NewFolder2\**" />
+    <EmbeddedResource Remove="ClientApp\src\NewFolder1\**" />
+    <EmbeddedResource Remove="ClientApp\src\NewFolder2\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\NewFolder1\**" />
+    <None Remove="ClientApp\src\NewFolder2\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>

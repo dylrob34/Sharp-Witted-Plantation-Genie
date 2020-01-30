@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,41 +9,38 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlantationGenie.sendes;
 using Sharp_Witted_Plantation_Genie.applicationLogic;
-using Sharp_Witted_Plantation_Genie.dataTransferObjects;
 
 namespace PlantationGenie.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    [Produces("application/json")]
+    [Route("[controller]")]
+    public class UserController : Controller
     {
 
         private readonly sendesContext _sendesContext;
-        private readonly UserManager _userManager;
 
-        public UserController(UserManager userRetriever, sendesContext sendesContext)
+        public UserController(sendesContext sendesContext)
         {
-            _userManager = userRetriever;
             _sendesContext = sendesContext;
         }
 
-        [HttpGet("{username}")]
-        public UserDTO GetUser(string username)
+        [HttpGet]
+        public JsonResult GetUser()
         {
             string authenticatedUser = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
             // if (authenticatedUser != username) // do something if the authenticated user is trying to make a get request
-                                                  // for a different user...
-            UserDTO user = _userManager.GetUser(username);
-            return user;
+            // for a different user...
+            User user = _sendesContext.Find<User>(authenticatedUser);
+            var response = new ResponseUser { firstName = user.FirstName, lastName = user.LastName };
+            return Json(response);
         }
 
-        // TODO: Add validation so user can't have a blank username, must have an email, etc..
-        [HttpPost("")]
-        [AllowAnonymous] // there is no need to be authenticated to create a new user
-        public ValidationResult CreateUser(CreateUserDTO createUserDTO){
-            ValidationResult result = _userManager.CreateUser(createUserDTO);
-            return result;
+        public class ResponseUser
+        {
+            public string firstName { get; set; }
+            public string lastName { get; set; }
         }
     }
 }

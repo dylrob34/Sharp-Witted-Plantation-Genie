@@ -14,34 +14,36 @@ export class Home extends Component {
         }
     }
 
-    async componentDidMount() {
-        const token = "Bearer " + getToken();
-      const response = await fetch('api/user/dylana1998',
-          {
-              headers: {
-                  Authorization: token,
-              }
-          });
-    if (!response.ok){
-      this.setState({ isLoading: false });
-      return;
-    }
-    const user = await response.json();
-    this.setState({ user: user, isLoading: false })
+    componentDidMount() {
+        const token = getToken();
+        const btoken = "Bearer " + token;
+        console.log(token);
+        if (token !== "") {
+            fetch('user',
+                {
+                    headers: {
+                        Authorization: btoken,
+                    },
+                })
+                .then((response) => response.json())
+                .then((user) => {
+                    this.setState({ user, isLoading: false });
+                });
+        }
+            
     }
 
-  render () {
-    const user = this.state.user;
-    const content = this.state.isLoading ? <p>Loading</p> : (
-      <div>
-        <p>first name: {user.firstName}</p>
-        <p>last name: {user.lastName}</p>
-      </div>
-    );
-    return (
-      <div>
-        {content}
-      </div>
-    );
-  }
+    render() {
+        const content = this.state.isLoading ? <p>Loading</p> : (
+            <div>
+                <p>first name: {this.state.user.firstName}</p>
+                <p>last name: {this.state.user.lastName}</p>
+            </div>
+        );
+        return (
+            <div>
+                {content}
+            </div>
+        );
+    }
 }

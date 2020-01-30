@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
@@ -22,8 +22,8 @@ export default class App extends Component {
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/buy' component={Buy} />
         <Route path='/login' component={Login} />
-            <Route path='/sign-up' component={SignUp} />
-            <Route path='/dashboard' component={Dashboard} />
+        <Route path='/sign-up' component={SignUp} />
+        <Route path='/dashboard' component={Dashboard} />
       </Layout>
     );
   }

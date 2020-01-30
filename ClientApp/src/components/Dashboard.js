@@ -1,5 +1,8 @@
 ﻿import React from 'react';
+import { Container, Row, Col } from 'reactstrap';
 import Device from './Device.js';
+import { getToken } from '../GlobalStates.js';
+import "../css/Dashboard.css";
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -10,30 +13,45 @@ export default class Dashboard extends React.Component {
 
         this.load = this.load.bind(this);
 
-        //this.load();
+        this.load();
     }
 
     load() {
-        fetch('devices/getMine')
-            .then((devices) => {
-                this.setState({ devices });
-            });
+        const token = getToken();
+        const btoken = "Bearer " + token;
+        if (token !== "") {
+
+            fetch('devices',
+                {
+                    headers: {
+                        Authorization: btoken,
+                    },
+                })
+                .then((response) => response.json())
+                .then((devices) => {
+                    this.setState({ devices });
+                });
+        }
     }
 
     render() {
         var listItems;
-        if (this.state.devices.length == 0) {
-            listItems = 0;
+        if (this.state.devices.length === 0) {
+            listItems = <h1>you do not have any devices registered yet...</h1>;
         } else {
             listItems = this.state.devices.map((device) =>
-                <li><Device id={device.id} tankLevel={device.tankLevel}
-                    moistureLevel={device.moistureLevel} plant={device.plant} /></li>
+                <Col className="dashboard-item"><Device key={device.id} id={device.id} tankLevel={device.waterLevel}
+                    moistureLevel={device.moistureLevel} plant={device.plantMonitoring} /></Col>
             );
         }
 
         return (
             <div>
-                <ul>{listItems}</ul>
+                <Container>
+                    <Row>
+                        {listItems}
+                    </Row>
+                </Container>
             </div>
         );
     }
