@@ -18,7 +18,7 @@ export class Home extends Component {
         const token = getToken();
         const btoken = "Bearer " + token;
         console.log(token);
-        if (token !== "") {
+        //if (token !== "") {
             fetch('user',
                 {
                     headers: {
@@ -28,8 +28,11 @@ export class Home extends Component {
                 .then((response) => response.json())
                 .then((user) => {
                     this.setState({ user, isLoading: false });
-                });
-        }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        //}
             
     }
 
