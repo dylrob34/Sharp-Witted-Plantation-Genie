@@ -1,2 +1,14 @@
-﻿body {
+﻿.device{
+    display: flex;
+}
+
+.device-image{
+    width: 50%;
+}
+
+.device-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 1rem;
 }

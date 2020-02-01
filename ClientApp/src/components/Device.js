@@ -23,23 +23,15 @@ export default class Device extends React.Component {
 
     render() {
         return (
-            <Container>
-                <Row>
-                    <Col><p>Tank Level</p></Col>
-                    <Col></Col>
-                    <Col><h3>{this.state.tankLevel}</h3></Col>
-                </Row>
-                <Row>
-                    <Col><p>Moisture Level</p></Col>
-                    <Col></Col>
-                    <Col><h3>{this.state.moistureLevel}</h3></Col>
-                </Row>
-                <Row>
-                    <Col><p>{this.props.plant}</p></Col>
-                    <Col></Col>
-                    <Col></Col>
-                </Row>
-            </Container>
+            <li className='device'>
+                <img className='device-image' src={`/images/plants/${this.props.plant}.jpg`}></img>
+                <div className='device-details'>
+                    <p> <b> Device Name: </b> My device name.. </p>
+                    <p> <b> Plant: </b> {this.props.plant} </p>
+                    <p> <b> Tank Level: </b> {this.props.tankLevel} / 10 oz </p>
+                    <p> <b> Moisture Level </b> {this.props.moistureLevel} </p>
+                </div>
+            </li>
         );
     }
 }

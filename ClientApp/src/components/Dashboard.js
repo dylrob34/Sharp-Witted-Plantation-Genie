@@ -1,14 +1,15 @@
 ﻿import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
 import Device from './Device.js';
 import { getToken } from '../GlobalStates.js';
 import "../css/Dashboard.css";
+import Loader from './Loader.js';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             devices: [],
+            isLoading: true
         }
 
         this.load = this.load.bind(this);
@@ -20,7 +21,7 @@ export default class Dashboard extends React.Component {
         const token = getToken();
         const btoken = "Bearer " + token;
         if (token !== "") {
-
+            this.setState({isLoading : true})
             fetch('devices',
                 {
                     headers: {
@@ -29,30 +30,36 @@ export default class Dashboard extends React.Component {
                 })
                 .then((response) => response.json())
                 .then((devices) => {
-                    this.setState({ devices });
+                    this.setState({ devices, isLoading: false });
                 });
         }
     }
 
     render() {
-        var listItems;
-        if (this.state.devices.length === 0) {
-            listItems = <h1>you do not have any devices registered yet...</h1>;
-        } else {
-            listItems = this.state.devices.map((device) =>
-                <Col className="dashboard-item"><Device key={device.id} id={device.id} tankLevel={device.waterLevel}
-                    moistureLevel={device.moistureLevel} plant={device.plantMonitoring} /></Col>
-            );
+        var contentToRender;
+        if (this.state.isLoading) contentToRender = <Loader/>
+        else if (this.state.devices.length === 0) {
+            contentToRender = <h1>you do not have any devices registered yet...</h1>
+        }
+        else{
+            contentToRender = (
+                <ul className='devices'>
+                    {transformDevices(this.state.devices)}
+                </ul>
+            )
         }
 
         return (
             <div>
-                <Container>
-                    <Row>
-                        {listItems}
-                    </Row>
-                </Container>
+                {contentToRender}
             </div>
         );
     }
+}
+
+function transformDevices(devices){
+    return devices.map((device) => (
+        <Device key = {device.id} id={device.id} tankLevel={device.waterLevel}
+        moistureLevel={device.moistureLevel} plant={device.plantMonitoring}/>
+    ));
 }
