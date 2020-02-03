@@ -11,6 +11,7 @@ namespace PlantationGenie.sendes
         public string PlantMonitering { get; set; }
         public decimal WaterLevel { get; set; }
         public int MoistureLevel { get; set; }
+        public string DeviceName { get; set; }
 
         public virtual Devicetype DeviceTypeNavigation { get; set; }
         public virtual Plant PlantMoniteringNavigation { get; set; }

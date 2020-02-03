@@ -22,6 +22,11 @@ namespace PlantationGenie.sendes
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySql("server=24.228.154.163;port=3306;user=plantGenie;password=seniordesign;database=sendes", x => x.ServerVersion("8.0.18-mysql"));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,6 +47,12 @@ namespace PlantationGenie.sendes
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .HasColumnType("int(11)");
+
+                entity.Property(e => e.DeviceName)
+                    .HasColumnName("deviceName")
+                    .HasColumnType("varchar(100)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.DeviceType)
                     .IsRequired()
