@@ -39,7 +39,8 @@ namespace PlantationGenie.Controllers
                     deviceType = d.DeviceType,
                     plantMonitoring = d.PlantMonitering,
                     waterLevel = d.WaterLevel,
-                    moistureLevel = d.MoistureLevel
+                    moistureLevel = d.MoistureLevel,
+                    deviceName = d.DeviceName
                 });
             }
             return deviceList;
@@ -53,9 +54,42 @@ namespace PlantationGenie.Controllers
         }
 
         // POST api/<controller>
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("editDevice")]
+        public responseEdit PostEditDevice(editDevice values)
         {
+            string authenticatedUser = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+
+            Device device = _context.Find<Device>(values.ID);
+
+            if (device.RegisteredUser == authenticatedUser)
+            {
+                device.DeviceName = values.deviceName;
+                device.PlantMonitering = values.plantName;
+                _context.SaveChanges();
+                return new responseEdit { Failed = false };
+            }
+
+
+            return new responseEdit { Failed = true};
+
+        }
+
+        [HttpPost("registerDevice")]
+        public responseEdit PostRegisterDevice(editDevice values)
+        {
+            string authenticatedUser = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            Device device = _context.Find<Device>(values.ID);
+            if (device == null) {
+                return new responseEdit { Failed = true, ErrorMessage = "That device does not exist" };
+            }
+            if (!string.IsNullOrEmpty(device.RegisteredUser)) {
+                return new responseEdit { Failed = true, ErrorMessage = "That device is already registered by another user" };
+            }
+            device.RegisteredUser = authenticatedUser;
+            device.DeviceName = values.deviceName;
+            device.PlantMonitering = values.plantName;
+            _context.SaveChanges();
+            return new responseEdit { Failed = false };
         }
 
         public struct responseDevice
@@ -65,6 +99,20 @@ namespace PlantationGenie.Controllers
             public string plantMonitoring { get; set; }
             public decimal waterLevel { get; set; }
             public int moistureLevel { get; set; }
+            public string deviceName {get;set;}
+        }
+
+        public struct editDevice
+        {
+            public int ID { get; set; }
+            public string deviceName { get; set; }
+            public string plantName { get; set; }
+        }
+
+        public struct responseEdit
+        {
+            public bool Failed { get; set; }
+            public string ErrorMessage { get; set;}
         }
     }
 }

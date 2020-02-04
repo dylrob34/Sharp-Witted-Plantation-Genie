@@ -37,7 +37,7 @@ export function getToken() {
         return "";
     }
     
-    return token;
+    return "Bearer " + token;
 }
 
 // we can export this and use it to sign out the user

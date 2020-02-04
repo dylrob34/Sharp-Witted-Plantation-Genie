@@ -5,7 +5,7 @@ class EditOrRegisterDeviceModal extends Component{
     constructor(props){
         super(props);
         if (props.mode.toLowerCase().includes("edit")){
-            this.state = {...this.props.deviceToEdit, deviceName: 'Default name...'}
+            this.state = {...this.props.deviceToEdit}
         }
         else{
             this.state = {
@@ -47,7 +47,7 @@ class EditOrRegisterDeviceModal extends Component{
                         {deviceIdFormGroup}
                         <FormGroup>
                             <Label for="deviceName">Device Name</Label>
-                            <Input type="text" name="deviceName" id="deviceName" placeholder="Device name..." value={deviceName} onChange={this.handleInputChange} />
+                            <Input type="text" name="deviceName" id="deviceName" placeholder="Device Name..." value={deviceName} onChange={this.handleInputChange} />
                         </FormGroup>
 
                         <FormGroup>

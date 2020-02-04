@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
 import { Buy } from './components/Buy';
-import { Login } from './components/Login';
+import LoginPopover from './components/LoginSignUpPopover';
 import { SignUp } from './components/SignUp';
 import Dashboard from './components/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute'
 
 import './custom.css'
 
@@ -18,12 +17,8 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
         <Route path='/buy' component={Buy} />
-        <Route path='/login' component={Login} />
-        <Route path='/sign-up' component={SignUp} />
-        <Route path='/dashboard' component={Dashboard} />
+        <ProtectedRoute path='/dashboard' component={Dashboard} />
       </Layout>
     );
   }

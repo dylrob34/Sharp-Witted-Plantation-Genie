@@ -5,6 +5,7 @@ import "../css/Dashboard.css";
 import Loader from './Loader.js';
 import EditOrRegisterDeviceModal from './EditOrRegisterDeviceModal';
 import { Button } from 'reactstrap';
+import { Redirect } from "react-router-dom";
 
 
 
@@ -19,6 +20,7 @@ export default class Dashboard extends React.Component {
             editDeviceMode: false,
             deviceToEdit: null
         }
+        this.token = getToken();
         this.load = this.load.bind(this);
         this.handleEditOrRegisterMode = this.handleEditOrRegisterMode.bind(this);
         this.closeEditOrRegisterModal = this.closeEditOrRegisterModal.bind(this);
@@ -32,21 +34,17 @@ export default class Dashboard extends React.Component {
     }
 
     load() {
-        const token = getToken();
-        const btoken = "Bearer " + token;
-        if (token !== "") {
-            this.setState({isLoading : true})
-            fetch('devices',
-                {
-                    headers: {
-                        Authorization: btoken,
-                    },
-                })
-                .then((response) => response.json())
-                .then((devices) => {
-                    this.setState({ devices, isLoading: false });
-                });
-        }
+        this.setState({isLoading : true})
+        fetch('devices',
+            {
+                headers: {
+                    Authorization: `${this.token}`
+                },
+            })
+            .then((response) => response.json())
+            .then((devices) => {
+                this.setState({ devices, isLoading: false });
+        });
     }
 
     getAllPlantNames(){
@@ -76,11 +74,39 @@ export default class Dashboard extends React.Component {
             this.setState(prevState => ({
                 devices: [...prevState.devices, device] // add device to end of array. Todo: Persist this in the database
             }))
+            fetch('devices/registerDevice', {
+                method: "POST",
+                headers: {
+                    Authorization: `${this.token}`,
+                    Accept: '*/*',
+                    'Content-Type': 'application/json',
+                    },
+                    body:JSON.stringify({
+                        "ID": parseInt(device.id),
+                        "deviceName": device.deviceName,
+                        "plantName": device.plantMonitoring
+                    })
+                })
         }
         else {
-            // TODO: edit device and persist this in the database
+            // TODO: persist this in the database
+            let updatedDevices = this.state.devices.map(d => d.id === device.id ? {...device} : d);
+            this.setState({devices: updatedDevices});   
+            fetch('devices/editDevice',
+                {
+                method: "POST",
+                headers: {
+                    Authorization: `${this.token}`,
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    },
+                    body:JSON.stringify({
+                        "ID": device.id,
+                        "deviceName": device.deviceName,
+                        "plantName": device.plantMonitoring
+                    })
+            })
         }
-
         this.closeEditOrRegisterModal();
     }
 
@@ -132,6 +158,6 @@ function transformDevices(devices, editDevice){
     return devices.map((device) => (
         <Device key = {device.id} id={device.id} tankLevel={device.waterLevel}
         moistureLevel={device.moistureLevel} plant={device.plantMonitoring} 
-        editDevice = {editDevice}/>
+        editDevice = {editDevice} deviceName = {device.deviceName}/>
     ));
 }

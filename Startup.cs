@@ -68,6 +68,13 @@ namespace PlantationGenie
                 options.UseMySql(Configuration.GetConnectionString("sendesContext"));
             });
 
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
             services.AddScoped<Authenticator>();
         }
 

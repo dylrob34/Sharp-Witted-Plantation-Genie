@@ -32,7 +32,7 @@ export default class Device extends React.Component {
                 <div className='device-highlights'>
                     <img className='device-image' src={`/images/plants/${this.props.plant}.jpg`}></img>
                     <div className='device-details'>
-                        <p> <b> Device Name: </b> Default Name... </p>
+                        <p> <b> Device Name: </b> {this.props.deviceName} </p>
                         <p> <b> Plant: </b> {this.props.plant} </p>
                         <p> <b> Tank Level: </b> {this.props.tankLevel} / 10 oz </p>
                         <p> <b> Moisture Level </b> {this.props.moistureLevel} </p>

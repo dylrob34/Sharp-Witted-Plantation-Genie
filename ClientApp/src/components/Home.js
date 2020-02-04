@@ -16,7 +16,7 @@ export class Home extends Component {
 
     componentDidMount() {
         const token = getToken();
-        const btoken = "Bearer " + token;
+        const btoken = token;
         console.log(token);
         //if (token !== "") {
             fetch('user',
