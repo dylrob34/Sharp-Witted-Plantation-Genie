@@ -86,6 +86,10 @@ export default class Dashboard extends React.Component {
                         "deviceName": device.deviceName,
                         "plantName": device.plantMonitoring
                     })
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    console.log("error message: " + res.ErrorMessage);
                 })
         }
         else {

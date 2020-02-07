@@ -29,7 +29,7 @@ namespace PlantationGenie.Controllers
         [HttpGet]
         public JsonResult GetUser()
         {
-            string authenticatedUser = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            string authenticatedUser = HttpContext.User.Identity.Name;
             // if (authenticatedUser != username) // do something if the authenticated user is trying to make a get request
             // for a different user...
             User user = _sendesContext.Find<User>(authenticatedUser);

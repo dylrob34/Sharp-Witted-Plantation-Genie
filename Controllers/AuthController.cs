@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PlantationGenie.sendes;
 using Sharp_Witted_Plantation_Genie.applicationLogic;
+using System;
+using System.Security.Claims;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,6 +35,13 @@ namespace PlantationGenie.Controllers
             }
 
             return new TokenResponseObject { Failed = false, Token = token};
+        }
+
+        [HttpGet("verify")]
+        public OkResult GetVerify()
+        {
+            Console.WriteLine("Succesfuly validated " + HttpContext.User.Identity.Name);
+            return Ok();
         }
     }
 

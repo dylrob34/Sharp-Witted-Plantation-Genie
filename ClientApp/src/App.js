@@ -7,6 +7,7 @@ import LoginPopover from './components/LoginSignUpPopover';
 import { SignUp } from './components/SignUp';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute'
+import { getLoginState } from "./GlobalStates.js";
 
 import './custom.css'
 

@@ -3,6 +3,7 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import Login from "./LoginSignUpPopover.js";
 import './NavMenu.css';
+import { removeToken, getToken, subscribe } from "../GlobalStates.js";
 
 export class NavMenu extends Component {
     static displayName = NavMenu.name;
@@ -14,9 +15,26 @@ export class NavMenu extends Component {
         this.state = {
             collapsed: true,
             popoveropen: false,
+            loggedIn: false,
         };
-
+        const t = getToken();
+        if (t.length > 0) {
+            fetch("auth/verify", {
+                headers: {
+                    Authorization: "Bearer " + t,
+                }
+            })
+                .then((res) => {
+                    if (res.status === 200) {
+                        this.setState({ loggedIn: true });
+                    }
+                })
+        }
         this.toggle = this.toggle.bind(this);
+        this.logout = this.logout.bind(this);
+        this.onLoginStatusChange = this.onLoginStatusChange.bind(this);
+
+        subscribe(this.onLoginStatusChange);
     }
 
     toggle() {
@@ -29,7 +47,42 @@ export class NavMenu extends Component {
         });
     }
 
+    logout() {
+        removeToken();
+    }
+
+    onLoginStatusChange(e) {
+        this.setState({ loggedIn: e });
+    }
+
     render() {
+        const loggedIn = this.state.loggedIn;
+        var toShow;
+
+        if (loggedIn == false) {
+            toShow = (
+                <NavItem>
+                    <NavLink id="Popoverlogin" className="text-dark">Login/SignUp</NavLink>
+                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle}>
+                        <PopoverBody>
+                            <Login toggle={this.toggle} />
+                        </PopoverBody>
+                    </Popover>
+                </NavItem>
+            )
+        } else {
+            toShow = (
+                <>
+                    <NavItem>
+                        <NavLink tag={Link} className="text-dark" to="/dashboard">Dashboard</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink tag={Link} className="text-dark" to="/" onClick={this.logout} >Logout</NavLink>
+                    </NavItem>
+                </>
+            )
+        }
+
         return (
             <header>
                 <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
@@ -44,17 +97,8 @@ export class NavMenu extends Component {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/buy">Buy</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink id="Popoverlogin" className="text-dark">Login/SignUp</NavLink>
-                                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle}>
-                                        <PopoverBody>
-                                            <Login />
-                                        </PopoverBody>
-                                    </Popover>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/dashboard">Dashboard</NavLink>
-                                </NavItem>
+                                {toShow}
+
                             </ul>
                         </Collapse>
                     </Container>

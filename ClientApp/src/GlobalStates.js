@@ -4,7 +4,7 @@ import jwt from 'jwt-decode'
 var emitter = new EventEmitter();
 
 var loginState = false;
-// var token = "";
+
 const tokenKey = 'token';
 
 export function getLoginState() {
@@ -19,11 +19,12 @@ export function unsubscribe(callback) {
 }
 export function updateLoginState(state) {
     loginState = state;
-    emitter.emit('login');
+    emitter.emit('login', loginState);
 }
 
 export function updateToken(t) {
     localStorage.setItem(tokenKey, t)
+    updateLoginState(true);
 }
 
 export function getToken() {
@@ -31,16 +32,17 @@ export function getToken() {
     if (token === null) return "";
 
     const decodedToken = jwt(token);
-    if (decodedToken.exp < new Date().getTime()/1000) {
+    if (decodedToken.exp < new Date().getTime() / 1000) {
         console.log("token is expired and the user needs to sign in again");
         removeToken();
         return "";
     }
-    
+
     return "Bearer " + token;
 }
 
 // we can export this and use it to sign out the user
-function removeToken(){
+export function removeToken() {
     localStorage.removeItem(tokenKey);
+    updateLoginState(false);
 }

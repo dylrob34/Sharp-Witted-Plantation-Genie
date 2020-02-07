@@ -82,14 +82,14 @@ namespace PlantationGenie.Controllers
             if (device == null) {
                 return new responseEdit { Failed = true, ErrorMessage = "That device does not exist" };
             }
-            if (!string.IsNullOrEmpty(device.RegisteredUser)) {
+            if (device.RegisteredUser != "Default User") {
                 return new responseEdit { Failed = true, ErrorMessage = "That device is already registered by another user" };
             }
             device.RegisteredUser = authenticatedUser;
             device.DeviceName = values.deviceName;
             device.PlantMonitering = values.plantName;
             _context.SaveChanges();
-            return new responseEdit { Failed = false };
+            return new responseEdit { Failed = false, ErrorMessage = "none" };
         }
 
         public struct responseDevice

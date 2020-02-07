@@ -21,6 +21,8 @@ export default class LoginPopover extends React.Component {
         this.login = this.login.bind(this);
         this.create = this.create.bind(this);
         this.changeTab = this.changeTab.bind(this);
+        this.onKeyDownCreate = this.onKeyDownCreate.bind(this);
+        this.onKeyDownLogin = this.onKeyDownLogin.bind(this);
     }
 
     onUsername(e) {
@@ -56,12 +58,9 @@ export default class LoginPopover extends React.Component {
             })
             .then((response) => response.json())
             .then((resjson) => {
-                /* if (!response.failed) {
-                     updateLoginState(response.login)
-                 }*/
-                console.log("response is: " + resjson.token);
-                updateLoginState(true);
                 updateToken(resjson.token);
+                updateLoginState(true);
+                this.props.toggle();
             });
     }
 
@@ -82,17 +81,32 @@ export default class LoginPopover extends React.Component {
             })
             .then((response) => response.json())
             .then((resjson) => {
-                /* if (!response.failed) {
-                     updateLoginState(response.login)
-                 }*/
-                console.log("response is: " + resjson.token);
                 updateLoginState(true);
                 updateToken(resjson.token);
+                this.props.toggle();
             });
     }
 
     changeTab(tab) {
         this.setState({ activeTab: tab });
+    }
+
+    onKeyDownLogin = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+        // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+            this.login();
+        }
+    }
+
+onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+    if(event.key === 'Enter') {
+    event.preventDefault();
+    event.stopPropagation();
+    this.create();
+}
     }
 
     render() {
@@ -117,7 +131,7 @@ export default class LoginPopover extends React.Component {
                             <Label for="username">Username</Label>
                             <Input type="text" name="username" id="username" placeholder="enter username..." onChange={this.onUsername} />
                             <Label for="password">Password</Label>
-                            <Input type="password" name="password" id="password" placeholder="enter password..." onChange={this.onPassword} />
+                            <Input type="password" name="password" id="password" placeholder="enter password..." onKeyDown={this.onKeyDownLogin} onChange={this.onPassword} />
                             <div style={{ "textAlign": "center", "marginTop": "10px" }}>
                                 <Button color="primary" onClick={this.login} >Login</Button>
                             </div>
@@ -132,7 +146,7 @@ export default class LoginPopover extends React.Component {
                             <Input type="password" name="spassword" id="spassword" placeholder="enter password..." onChange={this.onPassword} />
 
                             <Label for="confirm">Confirm Password</Label>
-                            <Input type="password" name="confim" id="confirm" placeholder="confirm password..." onChange={this.onConfirm} />
+                            <Input type="password" name="confim" id="confirm" placeholder="confirm password..." onKeyDown={this.onKeyDownCreate} onChange={this.onConfirm} />
 
                             <Label for="email">Email</Label>
                             <Input type="text" name="email" id="email" placeholder="enter email..." onChange={this.onEmail} />
