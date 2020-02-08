@@ -63,7 +63,7 @@ export class NavMenu extends Component {
             toShow = (
                 <NavItem>
                     <NavLink id="Popoverlogin" className="text-dark">Login/SignUp</NavLink>
-                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle}>
+                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle} trigger="legacy">
                         <PopoverBody>
                             <Login toggle={this.toggle} />
                         </PopoverBody>
