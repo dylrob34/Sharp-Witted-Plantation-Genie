@@ -63,7 +63,7 @@ export class NavMenu extends Component {
             toShow = (
                 <NavItem>
                     <NavLink style={{'cursor': 'pointer'}} id="Popoverlogin" className="text-dark">Login/SignUp</NavLink>
-                    <Popover style={{'cursor': 'pointer'}} placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle} trigger="legacy">
+                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle} trigger="legacy">
                         <PopoverBody>
                             <Login toggle={this.toggle} />
                         </PopoverBody>

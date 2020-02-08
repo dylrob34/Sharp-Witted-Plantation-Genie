@@ -122,12 +122,14 @@ onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
             <div>
                 <Nav tabs>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.changeTab('1') }}>
+                        <NavLink style={{'cursor': 'pointer'}} 
+                        className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.changeTab('1') }}>
                             Login
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.changeTab('2') }}>
+                        <NavLink style={{'cursor': 'pointer'}} 
+                        className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.changeTab('2') }}>
                             Sign Up
                         </NavLink>
                     </NavItem>
