@@ -11,9 +11,10 @@ export default class LoginPopover extends React.Component {
             username: "",
             password: "",
             confirm: "",
-            email: "",
+			email: "",
+			signInErrorMesssage: "",
             activeTab: '1',
-            redirect: false,
+			redirect: false,
         };
 
         this.onUsername = this.onUsername.bind(this);
@@ -60,9 +61,12 @@ export default class LoginPopover extends React.Component {
             })
             .then((response) => response.json())
             .then((resjson) => {
-                if (resjson.failed) return;
+                if (resjson.failed){
+					this.setState({signInErrorMessage : "Invalid username or password"});
+					return;
+				}
                 updateToken(resjson.token);
-                updateLoginState(true);
+				updateLoginState(true);
                 if (this.props.location != undefined) {
                     this.setState({ redirect: true });
                 } else {
@@ -105,13 +109,13 @@ export default class LoginPopover extends React.Component {
         }
     }
 
-onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
-    if(event.key === 'Enter') {
-    event.preventDefault();
-    event.stopPropagation();
-    this.create();
-}
+	onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+		// 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+		if(event.key === 'Enter') {
+			event.preventDefault();
+			event.stopPropagation();
+			this.create();
+		}
     }
 
     render() {
@@ -145,6 +149,7 @@ onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
 						<Label for="password">Password</Label>
                             <Input type="password" name="password" id="password" placeholder="enter password..." onKeyDown={this.onKeyDownLogin} onChange={this.onPassword} />
 						</FormGroup>
+						{this.state.signInErrorMessage && <span className="text-danger">Invalid username or password</span> }
                         <div style={{ "textAlign": "center", "margin": "1.6rem 0 1rem 0" }}>
                             <Button color="primary" onClick={this.login} >Login</Button>
                         </div>
