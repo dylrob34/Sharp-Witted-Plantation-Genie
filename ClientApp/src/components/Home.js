@@ -5,19 +5,17 @@ export class Home extends Component {
     static displayName = Home.name;
     constructor(props) {
         super(props);
+        var s = getLoginState();
         this.state = {
             user: {
                 firstName: "",
                 lastName: "",
             },
             isLoading: true,
-            loggedIn: false,
+            loggedIn: s,
         }
         this.toLogin = this.toLogin.bind(this);
         this.update = this.update.bind(this);
-
-        var s = getLoginState();
-        this.state = { loggedIn: s}
     }
 
     toLogin(e) {
