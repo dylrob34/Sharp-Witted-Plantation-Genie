@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { TabContent, TabPane, Nav, NavLink, NavItem, FormGroup, Label, Input, Button } from "reactstrap";
+import { TabContent, TabPane, Nav, NavLink, NavItem, FormGroup, Label, Input, Button, Form } from "reactstrap";
 import classnames from 'classnames';
 import { updateLoginState, updateToken } from '../GlobalStates';
 import { Redirect } from "react-router-dom";
@@ -11,9 +11,10 @@ export default class LoginPopover extends React.Component {
             username: "",
             password: "",
             confirm: "",
-            email: "",
+			email: "",
+			signInErrorMesssage: "",
             activeTab: '1',
-            redirect: false,
+			redirect: false,
         };
 
         this.onUsername = this.onUsername.bind(this);
@@ -60,8 +61,12 @@ export default class LoginPopover extends React.Component {
             })
             .then((response) => response.json())
             .then((resjson) => {
+                if (resjson.failed){
+					this.setState({signInErrorMessage : "Invalid username or password"});
+					return;
+				}
                 updateToken(resjson.token);
-                updateLoginState(true);
+				updateLoginState(true);
                 if (this.props.location != undefined) {
                     this.setState({ redirect: true });
                 } else {
@@ -104,13 +109,13 @@ export default class LoginPopover extends React.Component {
         }
     }
 
-onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
-    if(event.key === 'Enter') {
-    event.preventDefault();
-    event.stopPropagation();
-    this.create();
-}
+	onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+		// 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+		if(event.key === 'Enter') {
+			event.preventDefault();
+			event.stopPropagation();
+			this.create();
+		}
     }
 
     render() {
@@ -119,14 +124,16 @@ onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
         }
         return (
             <div>
-                <Nav tabs>
+                <Nav tabs style={{'marginBottom': '.9rem'}}>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.changeTab('1') }}>
+                        <NavLink style={{'cursor': 'pointer'}} 
+                        className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.changeTab('1') }}>
                             Login
                         </NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.changeTab('2') }}>
+                        <NavLink style={{'cursor': 'pointer'}} 
+                        className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.changeTab('2') }}>
                             Sign Up
                         </NavLink>
                     </NavItem>
@@ -137,30 +144,36 @@ onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
                         <FormGroup>
                             <Label for="username">Username</Label>
                             <Input type="text" name="username" id="username" placeholder="enter username..." onChange={this.onUsername} />
-                            <Label for="password">Password</Label>
+						</FormGroup>
+						<FormGroup>
+						<Label for="password">Password</Label>
                             <Input type="password" name="password" id="password" placeholder="enter password..." onKeyDown={this.onKeyDownLogin} onChange={this.onPassword} />
-                            <div style={{ "textAlign": "center", "marginTop": "10px" }}>
-                                <Button color="primary" onClick={this.login} >Login</Button>
-                            </div>
-                        </FormGroup>
+						</FormGroup>
+						{this.state.signInErrorMessage && <span className="text-danger">Invalid username or password</span> }
+                        <div style={{ "textAlign": "center", "margin": "1.6rem 0 1rem 0" }}>
+                            <Button color="primary" onClick={this.login} >Login</Button>
+                        </div>
                     </TabPane>
                     <TabPane tabId="2">
                         <FormGroup>
                             <Label for="susername">Username</Label>
                             <Input type="text" name="susername" id="susername" placeholder="enter username..." onChange={this.onUsername} />
-
-                            <Label for="spassword">Password</Label>
+						</FormGroup>
+						<FormGroup>
+							<Label for="spassword">Password</Label>
                             <Input type="password" name="spassword" id="spassword" placeholder="enter password..." onChange={this.onPassword} />
-
-                            <Label for="confirm">Confirm Password</Label>
+						</FormGroup>
+						<FormGroup>
+							<Label for="confirm">Confirm Password</Label>
                             <Input type="password" name="confim" id="confirm" placeholder="confirm password..." onKeyDown={this.onKeyDownCreate} onChange={this.onConfirm} />
-
-                            <Label for="email">Email</Label>
+						</FormGroup>
+						<FormGroup>
+							<Label for="email">Email</Label>
                             <Input type="text" name="email" id="email" placeholder="enter email..." onChange={this.onEmail} />
-                            <div style={{ "textAlign": "center", "marginTop": "10px" }}>
-                                <Button color="primary" onClick={this.create} >Create Account</Button>
-                            </div>
-                        </FormGroup>
+						</FormGroup>
+                        <div style={{ "textAlign": "center", "margin": "1.6rem 0 1rem 0" }}>
+                            <Button color="primary" onClick={this.create} >Create Account</Button>
+                        </div>
                     </TabPane>
                 </TabContent>
             </div>

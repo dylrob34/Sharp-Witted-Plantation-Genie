@@ -62,8 +62,8 @@ export class NavMenu extends Component {
         if (loggedIn == false) {
             toShow = (
                 <NavItem>
-                    <NavLink id="Popoverlogin" className="text-dark">Login/SignUp</NavLink>
-                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle}>
+                    <NavLink style={{'cursor': 'pointer'}} id="Popoverlogin" className="text-dark">Login/SignUp</NavLink>
+                    <Popover placement="bottom" isOpen={this.state.popoveropen} target="Popoverlogin" toggle={this.toggle} trigger="legacy">
                         <PopoverBody>
                             <Login toggle={this.toggle} />
                         </PopoverBody>

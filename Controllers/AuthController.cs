@@ -38,6 +38,7 @@ namespace PlantationGenie.Controllers
         }
 
         [HttpGet("verify")]
+        [Authorize]
         public OkResult GetVerify()
         {
             Console.WriteLine("Succesfuly validated " + HttpContext.User.Identity.Name);
