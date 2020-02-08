@@ -2,6 +2,7 @@
 import { TabContent, TabPane, Nav, NavLink, NavItem, FormGroup, Label, Input, Button } from "reactstrap";
 import classnames from 'classnames';
 import { updateLoginState, updateToken } from '../GlobalStates';
+import { Redirect } from "react-router-dom";
 
 export default class LoginPopover extends React.Component {
     constructor(props) {
@@ -12,6 +13,7 @@ export default class LoginPopover extends React.Component {
             confirm: "",
             email: "",
             activeTab: '1',
+            redirect: false,
         };
 
         this.onUsername = this.onUsername.bind(this);
@@ -60,7 +62,11 @@ export default class LoginPopover extends React.Component {
             .then((resjson) => {
                 updateToken(resjson.token);
                 updateLoginState(true);
-                this.props.toggle();
+                if (this.props.location != undefined) {
+                    this.setState({ redirect: true });
+                } else {
+                    this.props.toggle();
+                }
             });
     }
 
@@ -81,9 +87,7 @@ export default class LoginPopover extends React.Component {
             })
             .then((response) => response.json())
             .then((resjson) => {
-                updateLoginState(true);
-                updateToken(resjson.token);
-                this.props.toggle();
+                console.log(resjson);
             });
     }
 
@@ -110,6 +114,9 @@ onKeyDownCreate = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     }
 
     render() {
+        if (this.state.redirect) {
+            return (<Redirect to={this.props.location.state.forward} />);
+        }
         return (
             <div>
                 <Nav tabs>

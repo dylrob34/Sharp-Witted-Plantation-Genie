@@ -5,7 +5,6 @@ import "../css/Dashboard.css";
 import Loader from './Loader.js';
 import EditOrRegisterDeviceModal from './EditOrRegisterDeviceModal';
 import { Button } from 'reactstrap';
-import { Redirect } from "react-router-dom";
 
 
 

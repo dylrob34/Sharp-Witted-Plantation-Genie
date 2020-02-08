@@ -37,10 +37,41 @@ namespace PlantationGenie.Controllers
             return Json(response);
         }
 
-        public class ResponseUser
+        [HttpPost("register")]
+        public JsonResult PostRegister(CreateUser user)
+        {
+            if (user.username == user.confirm && validateEmail(user.email) && uniqueUsername(user.email))
+            {
+                //add user to db, generate a token
+                return Json("true");
+            } else
+            {
+                return Json("false");
+            }
+        }
+        //validate the email
+        public bool validateEmail(string email)
+        {
+            return true;
+        }
+        //validate the username is unique
+        public bool uniqueUsername(string username)
+        {
+            return true;
+        }
+
+        public struct ResponseUser
         {
             public string firstName { get; set; }
             public string lastName { get; set; }
+        }
+
+        public struct CreateUser
+        {
+            public string username { get; set; }
+            public string password { get; set; }
+            public string confirm { get; set; }
+            public string email { get; set; }
         }
     }
 }

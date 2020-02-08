@@ -16,6 +16,8 @@ export class Home extends Component {
         this.toLogin = this.toLogin.bind(this);
         this.update = this.update.bind(this);
 
+        var s = getLoginState();
+        this.setState({ loggedIn: s });
     }
 
     toLogin(e) {
@@ -23,7 +25,7 @@ export class Home extends Component {
         this.update();
     }
 
-    componentWillUnmount() {
+    componentWillMount() {
         unsubscribe(this.toLogin);
     }
 

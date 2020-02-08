@@ -51,6 +51,7 @@ namespace PlantationGenie.sendes
                 entity.Property(e => e.DeviceName)
                     .HasColumnName("deviceName")
                     .HasColumnType("varchar(100)")
+                    .HasDefaultValueSql("'Default'")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
@@ -66,16 +67,16 @@ namespace PlantationGenie.sendes
                     .HasColumnType("int(11)");
 
                 entity.Property(e => e.PlantMonitering)
-                    .IsRequired()
                     .HasColumnName("plantMonitering")
                     .HasColumnType("varchar(50)")
+                    .HasDefaultValueSql("'Default'")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
                 entity.Property(e => e.RegisteredUser)
-                    .IsRequired()
                     .HasColumnName("registeredUser")
-                    .HasColumnType("varchar(20)")
+                    .HasColumnType("varchar(50)")
+                    .HasDefaultValueSql("'Default User'")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
@@ -92,13 +93,11 @@ namespace PlantationGenie.sendes
                 entity.HasOne(d => d.PlantMoniteringNavigation)
                     .WithMany(p => p.Device)
                     .HasForeignKey(d => d.PlantMonitering)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("device_ibfk_2");
 
                 entity.HasOne(d => d.RegisteredUserNavigation)
                     .WithMany(p => p.Device)
                     .HasForeignKey(d => d.RegisteredUser)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("device_ibfk_1");
             });
 
