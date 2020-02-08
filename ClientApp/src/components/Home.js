@@ -17,7 +17,7 @@ export class Home extends Component {
         this.update = this.update.bind(this);
 
         var s = getLoginState();
-        this.setState({ loggedIn: s });
+        this.state = { loggedIn: s}
     }
 
     toLogin(e) {
