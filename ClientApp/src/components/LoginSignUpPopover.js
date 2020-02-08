@@ -60,6 +60,7 @@ export default class LoginPopover extends React.Component {
             })
             .then((response) => response.json())
             .then((resjson) => {
+                if (resjson.failed) return;
                 updateToken(resjson.token);
                 updateLoginState(true);
                 if (this.props.location != undefined) {
