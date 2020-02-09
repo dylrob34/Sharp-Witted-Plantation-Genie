@@ -30,7 +30,9 @@ namespace Sharp_Witted_Plantation_Genie.applicationLogic
                 UserName = createUserObject.Username,
                 Email = createUserObject.Email,
                 Password = passwordResult.HashedPassword,
-                Salt = passwordResult.SaltedText
+                Salt = passwordResult.SaltedText,
+                FirstName = "",
+                LastName = ""
             };
             _sendesContext.User.Add(user);
             _sendesContext.SaveChanges();

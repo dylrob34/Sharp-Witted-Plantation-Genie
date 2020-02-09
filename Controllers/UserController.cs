@@ -42,17 +42,18 @@ namespace PlantationGenie.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public ActionResult PostRegister(CreateUser user)
         {
-            bool userWasCreatedSuccesfully = _userCreator.CreateUser(user, ModelState);
-            if (!userWasCreatedSuccesfully){
-                string json = JsonConvert.SerializeObject(new
+            bool userWasCreatedSuccessfully = _userCreator.CreateUser(user, ModelState);
+            if (!userWasCreatedSuccessfully){
+                string jsonErrorMessage = JsonConvert.SerializeObject(new
                 {
-                    errors = ModelState.ToDictionary(x => x.Key, x => x.Value.Errors)
+                    errors = ModelState.ToDictionary(x => x.Key, x => x.Value.Errors.Select(error => error.ErrorMessage))
                 });
-                return Content(json, "application/json");
+                return Content(jsonErrorMessage, "application/json");
             }
-            return Json(userWasCreatedSuccesfully);
+            return Json(userWasCreatedSuccessfully);
         }
 
         public struct ResponseUser
