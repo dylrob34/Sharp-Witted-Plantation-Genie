@@ -76,7 +76,7 @@ export default class LoginPopover extends React.Component {
     }
 
     create() {
-        fetch('auth/create',
+        fetch('user/register',
             {
                 method: 'POST',
                 headers: {
@@ -91,8 +91,13 @@ export default class LoginPopover extends React.Component {
                 })
             })
             .then((response) => response.json())
-            .then((resjson) => {
-                console.log(resjson);
+            .then((responseJson) => {
+                if (responseJson === true){
+                    // the user was created successfully, so, sign him in 
+                    this.login();
+                    return;
+                }
+                console.log(responseJson);
             });
     }
 
