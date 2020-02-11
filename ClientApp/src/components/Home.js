@@ -23,7 +23,7 @@ export class Home extends Component {
         this.update();
     }
 
-    componentWillMount() {
+    componentWillUnmount() {
         unsubscribe(this.toLogin);
     }
 
