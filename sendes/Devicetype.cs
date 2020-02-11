@@ -12,6 +12,7 @@ namespace PlantationGenie.sendes
 
         public string Size { get; set; }
         public decimal? TankSize { get; set; }
+        public bool? IsInStock { get; set; }
 
         public virtual ICollection<Device> Device { get; set; }
     }

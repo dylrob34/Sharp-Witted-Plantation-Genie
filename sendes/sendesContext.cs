@@ -114,6 +114,8 @@ namespace PlantationGenie.sendes
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.IsInStock).HasColumnName("isInStock");
+
                 entity.Property(e => e.TankSize)
                     .HasColumnName("tankSize")
                     .HasColumnType("decimal(4,1)");
