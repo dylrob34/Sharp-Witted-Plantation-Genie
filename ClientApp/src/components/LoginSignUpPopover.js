@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { TabContent, TabPane, Nav, NavLink, NavItem, FormGroup, Label, Input, Button, Form } from "reactstrap";
+import { TabContent, TabPane, Nav, NavLink, NavItem, FormGroup, Label, Input, Button, FormFeedback } from "reactstrap";
 import classnames from 'classnames';
 import { updateLoginState, updateToken } from '../GlobalStates';
 import { Redirect } from "react-router-dom";
@@ -12,7 +12,11 @@ export default class LoginPopover extends React.Component {
             password: "",
             confirm: "",
 			email: "",
-			signInErrorMesssage: "",
+            signInErrorMesssage: "",
+            usernameErrorMessage: "",
+            passwordErrorMessage: "",
+            confirmedPasswordErrorMessage: "",
+            emailErrorMessage: "",
             activeTab: '1',
 			redirect: false,
         };
@@ -76,6 +80,10 @@ export default class LoginPopover extends React.Component {
     }
 
     create() {
+        const registerFormIsValid = this.validateRegisterForm();
+        if (!registerFormIsValid){
+            return;
+        }
         fetch('user/register',
             {
                 method: 'POST',
@@ -101,8 +109,33 @@ export default class LoginPopover extends React.Component {
             });
     }
 
+    validateRegisterForm = () => {
+        let usernameErrorMessage, passwordErrorMessage, confirmedPasswordErrorMessage, emailErrorMessage;
+        usernameErrorMessage = passwordErrorMessage = confirmedPasswordErrorMessage = emailErrorMessage = "";
+
+        if (this.state.username.trim() === "") usernameErrorMessage = "The username field is required";
+        if (this.state.password.trim() === "") passwordErrorMessage = "The password field is required";
+        if (this.state.confirm !== this.state.password) confirmedPasswordErrorMessage = "The passwords do not match"
+        if (this.state.email.trim() === "") emailErrorMessage = "The email field is required";
+        this.setState({
+            usernameErrorMessage,
+            passwordErrorMessage,
+            confirmedPasswordErrorMessage,
+            emailErrorMessage
+        })
+        console.log(usernameErrorMessage, passwordErrorMessage, confirmedPasswordErrorMessage, emailErrorMessage);
+        
+        if (usernameErrorMessage || passwordErrorMessage || confirmedPasswordErrorMessage || emailErrorMessage) return false;
+        return true;
+    }
+
     changeTab(tab) {
-        this.setState({ activeTab: tab });
+        // clear username and password when tab changes
+        this.setState({ 
+            activeTab: tab,
+            username: "",
+            password: ""
+        });
     }
 
     onKeyDownLogin = (event: React.KeyboardEvent<HTMLDivElement>): void => {
@@ -124,6 +157,7 @@ export default class LoginPopover extends React.Component {
     }
 
     render() {
+        const { usernameErrorMessage, passwordErrorMessage, confirmedPasswordErrorMessage, emailErrorMessage } = this.state;
         if (this.state.redirect) {
             return (<Redirect to={this.props.location.state.forward} />);
         }
@@ -162,19 +196,23 @@ export default class LoginPopover extends React.Component {
                     <TabPane tabId="2">
                         <FormGroup>
                             <Label for="susername">Username</Label>
-                            <Input type="text" name="susername" id="susername" placeholder="enter username..." onChange={this.onUsername} />
+                            <Input invalid = {usernameErrorMessage !== ""} type="text" name="susername" id="susername" placeholder="enter username..." onChange={this.onUsername} />
+                            <FormFeedback>{usernameErrorMessage}</FormFeedback>
 						</FormGroup>
 						<FormGroup>
 							<Label for="spassword">Password</Label>
-                            <Input type="password" name="spassword" id="spassword" placeholder="enter password..." onChange={this.onPassword} />
+                            <Input invalid = {passwordErrorMessage !== ""} type="password" name="spassword" id="spassword" placeholder="enter password..." onChange={this.onPassword} />
+                            <FormFeedback>{passwordErrorMessage}</FormFeedback>
 						</FormGroup>
 						<FormGroup>
 							<Label for="confirm">Confirm Password</Label>
-                            <Input type="password" name="confim" id="confirm" placeholder="confirm password..." onKeyDown={this.onKeyDownCreate} onChange={this.onConfirm} />
+                            <Input invalid = {confirmedPasswordErrorMessage !== ""}  type="password" name="confim" id="confirm" placeholder="confirm password..." onKeyDown={this.onKeyDownCreate} onChange={this.onConfirm} />
+                            <FormFeedback>{confirmedPasswordErrorMessage}</FormFeedback>
 						</FormGroup>
 						<FormGroup>
 							<Label for="email">Email</Label>
-                            <Input type="text" name="email" id="email" placeholder="enter email..." onChange={this.onEmail} />
+                            <Input invalid = {emailErrorMessage} type="text" name="email" id="email" placeholder="enter email..." onChange={this.onEmail} />
+                            <FormFeedback>{emailErrorMessage}</FormFeedback>
 						</FormGroup>
                         <div style={{ "textAlign": "center", "margin": "1.6rem 0 1rem 0" }}>
                             <Button color="primary" onClick={this.create} >Create Account</Button>
