@@ -105,7 +105,9 @@ export default class LoginPopover extends React.Component {
                     this.login();
                     return;
                 }
-                console.log(responseJson);
+                else {
+                    this.handleRegistrationErrors(responseJson.errors);
+                }
             });
     }
 
@@ -116,7 +118,9 @@ export default class LoginPopover extends React.Component {
         if (this.state.username.trim() === "") usernameErrorMessage = "The username field is required";
         if (this.state.password.trim() === "") passwordErrorMessage = "The password field is required";
         if (this.state.confirm !== this.state.password) confirmedPasswordErrorMessage = "The passwords do not match"
+
         if (this.state.email.trim() === "") emailErrorMessage = "The email field is required";
+        else if (!this.isValidEmailAddress(this.state.email.trim())) emailErrorMessage = "Invalid email format";
         this.setState({
             usernameErrorMessage,
             passwordErrorMessage,
@@ -127,6 +131,16 @@ export default class LoginPopover extends React.Component {
         
         if (usernameErrorMessage || passwordErrorMessage || confirmedPasswordErrorMessage || emailErrorMessage) return false;
         return true;
+    }
+
+    isValidEmailAddress = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    }
+
+    handleRegistrationErrors = (registrationErrors) => {
+        const emailErrorMessage = registrationErrors.Email ? registrationErrors.Email[0] : "";
+        const usernameErrorMessage = registrationErrors.Username ? registrationErrors.Username[0] : "";
+        this.setState({emailErrorMessage, usernameErrorMessage});
     }
 
     changeTab(tab) {
@@ -211,7 +225,7 @@ export default class LoginPopover extends React.Component {
 						</FormGroup>
 						<FormGroup>
 							<Label for="email">Email</Label>
-                            <Input invalid = {emailErrorMessage} type="text" name="email" id="email" placeholder="enter email..." onChange={this.onEmail} />
+                            <Input invalid = {emailErrorMessage !== ""} type="text" name="email" id="email" placeholder="enter email..." onChange={this.onEmail} />
                             <FormFeedback>{emailErrorMessage}</FormFeedback>
 						</FormGroup>
                         <div style={{ "textAlign": "center", "margin": "1.6rem 0 1rem 0" }}>
