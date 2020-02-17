@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using PlantationGenie.sendes;
 using Sharp_Witted_Plantation_Genie.applicationLogic;
 using Sharp_Witted_Plantation_Genie.helpers;
+using System.Net.Mail;
 using System.Text;
 
 namespace PlantationGenie
@@ -77,6 +78,8 @@ namespace PlantationGenie
 
             services.AddScoped<Authenticator>();
             services.AddScoped<UserCreator>();
+            services.AddScoped<EmailClient>();
+            services.AddScoped<SmtpClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

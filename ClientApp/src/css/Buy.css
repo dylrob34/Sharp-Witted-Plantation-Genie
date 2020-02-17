@@ -1,0 +1,30 @@
+.purchase-content{
+    display: flex;
+}
+
+.purchase-image-wrapper{
+    width: 50%;
+    margin-right: 1rem;
+}
+
+.purchase-image{
+    width: 70%;
+}
+
+.purchase-information{
+    max-width: 430px;
+}
+
+.purchase-information-device-features{
+    padding-left: 1.5rem;
+}
+
+.purchase-information-device-features > * {
+    margin-bottom: 1rem;
+}
+
+@media(max-width: 700px){
+    .purchase-image-wrapper{
+        display: none;
+    }
+}
