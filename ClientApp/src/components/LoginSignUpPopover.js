@@ -3,6 +3,7 @@ import { TabContent, TabPane, Nav, NavLink, NavItem, FormGroup, Label, Input, Bu
 import classnames from 'classnames';
 import { updateLoginState, updateToken } from '../GlobalStates';
 import { Redirect } from "react-router-dom";
+import isValidEmailAddress from '../utils/validateEmail';
 
 export default class LoginPopover extends React.Component {
     constructor(props) {
@@ -120,7 +121,7 @@ export default class LoginPopover extends React.Component {
         if (this.state.confirm !== this.state.password) confirmedPasswordErrorMessage = "The passwords do not match"
 
         if (this.state.email.trim() === "") emailErrorMessage = "The email field is required";
-        else if (!this.isValidEmailAddress(this.state.email.trim())) emailErrorMessage = "Invalid email format";
+        else if (!isValidEmailAddress(this.state.email.trim())) emailErrorMessage = "Invalid email format";
         this.setState({
             usernameErrorMessage,
             passwordErrorMessage,
@@ -131,10 +132,6 @@ export default class LoginPopover extends React.Component {
         
         if (usernameErrorMessage || passwordErrorMessage || confirmedPasswordErrorMessage || emailErrorMessage) return false;
         return true;
-    }
-
-    isValidEmailAddress = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     }
 
     handleRegistrationErrors = (registrationErrors) => {
