@@ -35,6 +35,9 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println("Starting...");
+  Serial.println("mode: " + WiFi.getMode());
+  WiFi.enableAP(true);
+  Serial.println("mode: " + WiFi.getMode());
   EEPROM.get(0, wifiInfo);
   Serial.println(wifiInfo.res);
   while (success)
@@ -69,26 +72,26 @@ void setup()
       Serial.println(wifiInfo.res);
       Serial.println("got ssid...connecting");
       WiFi.softAPdisconnect(true);
+      WiFi.enableSTA(true);
       String u = wifiInfo.ssid;
       String p = wifiInfo.password;
       WiFi.begin(u, p);
       Serial.println("connecting");
-      for (int i = 0; i < 5000; i = i + 1000)
-      {
-        if (WiFi.status() == WL_CONNECTED)
-        {
-          success = false;
-        }
+      while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.println(".");
       }
+      success = false;
     } else {
+      WiFi.enableSTA(true);
+      Serial.println("mode");
+      Serial.println(WiFi.getMode()); 
       WiFi.begin(wifiInfo.ssid, wifiInfo.password);
-      for (int i = 0; i < 5000; i = i + 1000)
-      {
-        if (WiFi.status() == WL_CONNECTED)
-        {
-          success = false;
-        }
+      while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.println(".");
       }
+      success = false;
     }
     
     
