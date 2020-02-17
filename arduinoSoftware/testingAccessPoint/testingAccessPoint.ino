@@ -31,16 +31,19 @@ String responseHTMLFailed = "<!DOCTYPE html><html><head><title>Login</title></he
                       "Password:<input type='password' name='PASSWORD' placeholder='password'><br>"
                       "<input type='submit' name='SUBMIT' value='Submit'></form><br>";
 creds wifiInfo;
+int count;
 void setup()
 {
   Serial.begin(115200);
   Serial.println("Starting...");
+  EEPROM.begin(512);
   EEPROM.get(0, wifiInfo);
-  Serial.println(wifiInfo.res);
   while (success)
   {
-    if (wifiInfo.res != 1)
+    if (wifiInfo.res != 2)
     {
+      WiFi.enableAP(true);
+      count = 0;
       Serial.print("Setting soft-AP ... ");
       WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
       boolean result = WiFi.softAP("PlantGenie");
@@ -69,25 +72,40 @@ void setup()
       Serial.println(wifiInfo.res);
       Serial.println("got ssid...connecting");
       WiFi.softAPdisconnect(true);
+      WiFi.enableSTA(true);
       String u = wifiInfo.ssid;
       String p = wifiInfo.password;
       WiFi.begin(u, p);
       Serial.println("connecting");
-      for (int i = 0; i < 5000; i = i + 1000)
-      {
-        if (WiFi.status() == WL_CONNECTED)
-        {
-          success = false;
+      while (WiFi.status() != WL_CONNECTED) {
+        if (count < 10) {
+           delay(500);
+           Serial.println(".");
+           count += 1;
+        } else {
+          break;
         }
       }
+      if (WiFi.status() == WL_CONNECTED) {
+        
+      success = false;
+      }
     } else {
+      WiFi.enableSTA(true);
       WiFi.begin(wifiInfo.ssid, wifiInfo.password);
-      for (int i = 0; i < 5000; i = i + 1000)
-      {
-        if (WiFi.status() == WL_CONNECTED)
-        {
-          success = false;
+      while (WiFi.status() != WL_CONNECTED) {
+        if (count < 10) {
+           delay(500);
+           Serial.println(".");
+           count += 1;
+        } else {
+          break;
         }
+      }
+      if (WiFi.status() == WL_CONNECTED) {
+        success = false;
+      } else {
+        wifiInfo.res = 50;
       }
     }
     
@@ -148,8 +166,11 @@ void getTheSSID()
 
 void setCreds(String username, String pass)
 {
-  creds c = { 1, username, pass };
+  byte stupid = 2;
+  creds c = { stupid, username, pass };
+  Serial.println("creds...");
   EEPROM.put(0, c);
+  EEPROM.end();
   wifiInfo.res = 1;
   wifiInfo.ssid = username;
   wifiInfo.password = pass;
