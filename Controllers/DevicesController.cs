@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlantationGenie.sendes;
 using Sharp_Witted_Plantation_Genie.applicationLogic;
@@ -75,6 +76,7 @@ namespace PlantationGenie.Controllers
         }
 
         [HttpPost("registerDevice")]
+        [Authorize]
         public responseEdit PostRegisterDevice(editDevice values)
         {
             string authenticatedUser = HttpContext.User.FindFirst(ClaimTypes.Name).Value;
@@ -82,9 +84,10 @@ namespace PlantationGenie.Controllers
             if (device == null) {
                 return new responseEdit { Failed = true, ErrorMessage = "That device does not exist" };
             }
-            if (device.RegisteredUser != "Default User") {
+            if (device.RegisteredUser != null) {
                 return new responseEdit { Failed = true, ErrorMessage = "That device is already registered by another user" };
             }
+            System.Console.WriteLine("registering device...");
             device.RegisteredUser = authenticatedUser;
             device.DeviceName = values.deviceName;
             device.PlantMonitering = values.plantName;

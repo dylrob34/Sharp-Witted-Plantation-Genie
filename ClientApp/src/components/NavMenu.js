@@ -21,7 +21,7 @@ export class NavMenu extends Component {
         if (t.length > 0) {
             fetch("auth/verify", {
                 headers: {
-                    Authorization: "Bearer " + t,
+                    Authorization: t,
                 }
             })
                 .then((res) => {

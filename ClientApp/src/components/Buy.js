@@ -12,7 +12,7 @@ export class Buy extends React.Component {
         selectedDeviceType: 's', // hardcoded for now..
         emailAddress: '',
         emailErrorMessage: '',
-        purchaseHasBeenMade: true
+        purchaseHasBeenMade: false
     }
 
     componentDidMount(){
@@ -110,7 +110,7 @@ export class Buy extends React.Component {
                 Your purchase has been successfully made.
                 <br/>
                 <br/>
-                Please check your email address for email that explains 
+                Please check your email address for an email that explains 
                 how your device can be registered.
             </ModalBody>
             <ModalFooter>
