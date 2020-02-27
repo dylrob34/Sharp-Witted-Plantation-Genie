@@ -4,8 +4,6 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM node:latest
-
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["PlantationGenie.csproj", ""]
@@ -15,6 +13,10 @@ WORKDIR "/src/."
 RUN dotnet build "PlantationGenie.csproj" -c Release -o /app/build
 
 FROM build AS publish
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+RUN apt-get install -y nodejs
+
 RUN dotnet publish "PlantationGenie.csproj" -c Release -o /app/publish
 
 FROM base AS final
