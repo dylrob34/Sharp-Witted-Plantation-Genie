@@ -14,6 +14,7 @@ WORKDIR "/src/."
 RUN dotnet build "PlantationGenie.csproj" -c Release -o /app/build
 
 FROM build AS publish
+FROM node:10
 RUN dotnet publish "PlantationGenie.csproj" -c Release -o /app/publish
 
 FROM base AS final
