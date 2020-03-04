@@ -87,10 +87,30 @@ namespace PlantationGenie.Controllers
             if (device.RegisteredUser != null) {
                 return new responseEdit { Failed = true, ErrorMessage = "That device is already registered by another user" };
             }
-            System.Console.WriteLine("registering device...");
+            Console.WriteLine("registering device...");
             device.RegisteredUser = authenticatedUser;
             device.DeviceName = values.deviceName;
             device.PlantMonitering = values.plantName;
+            _context.SaveChanges();
+            return new responseEdit { Failed = false, ErrorMessage = "none" };
+        }
+
+        [HttpPost("deviceUpdate")]
+        public responseEdit PostDeviceUpdate(deviceUpdateStruct values)
+        {
+            Device device = _context.Find<Device>(values.deviceId);
+            Console.WriteLine("Moisture" + values.moistureLevel);
+            Console.WriteLine("water" + values.waterLevel);
+            if (device == null)
+            {
+                return new responseEdit { Failed = true, ErrorMessage = "That device does not exist" };
+            }
+            if (device.RegisteredUser != null)
+            {
+                return new responseEdit { Failed = true, ErrorMessage = "That device is already registered by another user" };
+            }
+            device.WaterLevel = values.waterLevel;
+            device.MoistureLevel = values.moistureLevel;
             _context.SaveChanges();
             return new responseEdit { Failed = false, ErrorMessage = "none" };
         }
@@ -116,6 +136,13 @@ namespace PlantationGenie.Controllers
         {
             public bool Failed { get; set; }
             public string ErrorMessage { get; set;}
+        }
+
+        public struct deviceUpdateStruct
+        {
+            public string deviceId { get; set; }
+            public decimal waterLevel { get; set; }
+            public int moistureLevel { get; set; }
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Sharp_Witted_Plantation_Genie.Controllers
         }
     }
 
-    public class PurchaseRequest
+    public struct PurchaseRequest
     {
 
         [Required]

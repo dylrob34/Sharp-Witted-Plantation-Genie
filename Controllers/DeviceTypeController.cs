@@ -30,7 +30,7 @@ namespace Sharp_Witted_Plantation_Genie.Controllers
             return responseDeviceTypes;
         }
 
-        public class ResponseDeviceType{
+        public struct ResponseDeviceType{
             public string Size { get; set; }
             public decimal? TankSize { get; set; }
             public bool? IsInStock { get; set; }
