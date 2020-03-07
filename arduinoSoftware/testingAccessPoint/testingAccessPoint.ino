@@ -9,6 +9,8 @@ DNSServer dnsServer;
 IPAddress apIP(10, 10, 10, 1);
 const byte DNS_PORT = 53;
 
+String id = "{\"deviceId\":1\",";
+
 struct creds {
   byte res;
   String ssid;
@@ -17,7 +19,6 @@ struct creds {
 
 bool getCreds = true;
 bool success = true;
-
 String ssid;
 String password;
 
@@ -35,7 +36,6 @@ int count;
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Starting...");
   EEPROM.begin(512);
   EEPROM.get(0, wifiInfo);
   while (success)
@@ -44,22 +44,20 @@ void setup()
     {
       WiFi.enableAP(true);
       count = 0;
-      Serial.print("Setting soft-AP ... ");
       WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
       boolean result = WiFi.softAP("PlantGenie");
       if(result == true)
       {
-        Serial.println("Ready");
+        //Serial.println("Ready");
       }
       else
       {
-        Serial.println("Failed!");
+        //Serial.println("Failed!");
       }
   
       dnsServer.start(DNS_PORT, "*", apIP);
       
       server.onNotFound([]() {
-        Serial.println("captured!");
         server.send(200, "text/html", responseHTML);
       });
   
@@ -67,16 +65,11 @@ void setup()
       
       server.begin();
       getTheSSID();
-      Serial.println(wifiInfo.ssid);
-      Serial.println(wifiInfo.password);
-      Serial.println(wifiInfo.res);
-      Serial.println("got ssid...connecting");
       WiFi.softAPdisconnect(true);
       WiFi.enableSTA(true);
       String u = wifiInfo.ssid;
       String p = wifiInfo.password;
       WiFi.begin(u, p);
-      Serial.println("connecting");
       while (WiFi.status() != WL_CONNECTED) {
         if (count < 10) {
            delay(500);
@@ -96,7 +89,6 @@ void setup()
       while (WiFi.status() != WL_CONNECTED) {
         if (count < 10) {
            delay(500);
-           Serial.println(".");
            count += 1;
         } else {
           break;
@@ -118,22 +110,18 @@ void setup()
 
 void handleLogin()
 {
-  Serial.println("getting a response");
   if (server.hasArg("plain") == true)
   {
     String message = server.arg("plain");
-    Serial.println("body is: " + message);
     message.remove(0, 5);
 
     byte index = message.indexOf("&");
 
     String s = message.substring(0, index);
-    Serial.println(ssid);
     message.remove(0, 10 + index);
     index = message.indexOf("&");
 
     String p = message.substring(0, index);
-    Serial.println(password);
 
     setCreds(s, p);
     
@@ -147,14 +135,13 @@ void handleLogin()
 
 void loop()
 {
-  String postData = "{\"username\":\"dylana1998\",\"password\":\"admin\"}";
-  sendM(postData);
-  delay(5000);
+  String postData = Serial.readString();
+  String together = id + postData;
+  sendM(together);
 }
 
 void getTheSSID()
 {
-  Serial.println("starting to listen...");
   while (getCreds)
   {
     dnsServer.processNextRequest();
@@ -168,7 +155,6 @@ void setCreds(String username, String pass)
 {
   byte stupid = 2;
   creds c = { stupid, username, pass };
-  Serial.println("creds...");
   EEPROM.put(0, c);
   EEPROM.end();
   wifiInfo.res = 1;
@@ -187,29 +173,26 @@ void sendM(String postData)
 
     
 
-    Serial.print("[HTTP] begin...\n");
     // configure traged server and url
-    http.begin(client, "http://192.168.137.1/auth/login"); //HTTP
+    http.begin(client, "http://dylrob34.mynetgear.com/devices/deviceUpdate"); //HTTP
     http.addHeader("Content-Type", "application/json");
 
-    Serial.print("[HTTP] POST...\n");
     // start connection and send HTTP header and body
     int httpCode = http.POST(postData);
 
     // httpCode will be negative on error
     if (httpCode > 0) {
       // HTTP header has been send and Server response header has been handled
-      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
 
       // file found at server
       if (httpCode == 200) {
-        const String& payload = http.getString();
-        Serial.println("received payload:\n<<");
-        Serial.println(payload);
-        Serial.println(">>");
+        //const String& payload = http.getString();
+        //Serial.println("received payload:\n<<");
+        //Serial.println(payload);
+        //Serial.println(">>");
       }
     } else {
-      Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      //Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
     }
 
     http.end();
